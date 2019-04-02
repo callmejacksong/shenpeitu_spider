@@ -52,6 +52,9 @@ class WeshineSpider(scrapy.Spider):
                 if len(content_list)>=2:
                     text = content_list[1].strip()
                     text_guid = content_list[0].strip()
+                    text = "".join(text.split("\'"))
+                    text = "".join(text.split("""\""""))
+
                     meta = {"text":text,"text_guid":text_guid}
                     print(text)
                     # print(self.get_tag_url())

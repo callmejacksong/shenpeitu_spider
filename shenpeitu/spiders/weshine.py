@@ -44,22 +44,25 @@ class WeshineSpider(scrapy.Spider):
 
     def start_requests(self):
         with open("keyword_net.txt","r",encoding="utf-8") as f:
+            count = 0
             while True:
+                count+=1
                 content = f.readline().strip()
                 if len(content)==0:
                     break
-                content_list = content.split(" || ")
-                if len(content_list)>=2:
-                    text = content_list[1].strip()
-                    text_guid = content_list[0].strip()
-                    text = "".join(text.split("\'"))
-                    text = "".join(text.split("""\""""))
+                if count>120000:
+                    content_list = content.split(" || ")
+                    if len(content_list)>=2:
+                        text = content_list[1].strip()
+                        text_guid = content_list[0].strip()
+                        # text = "".join(text.split("\'"))
+                        # text = "".join(text.split("""\""""))
 
-                    meta = {"text":text,"text_guid":text_guid}
-                    print(text)
-                    # print(self.get_tag_url())
-                    # print(meta)
-                    yield scrapy.FormRequest(method="POST",callback=self.parse_tag,url=self.get_tag_url(),meta=meta,formdata={"text":text},headers=self.headers)
+                        meta = {"text":text,"text_guid":text_guid}
+                        print(text)
+                        # print(self.get_tag_url())
+                        # print(meta)
+                        yield scrapy.FormRequest(method="POST",callback=self.parse_tag,url=self.get_tag_url(),meta=meta,formdata={"text":text},headers=self.headers)
 
     def parse_tag(self,response):
         # print("parse执行了")

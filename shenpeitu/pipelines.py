@@ -83,11 +83,11 @@ class ShenpeituPipeline(object):
         content = "%s-song-%s-song-%s-song-%s-song-%s-song-%s-song-%s-song-%s-song-%s-song-%s"%(item["text"],item["tag"],item["gif_id"],item["big_url"],item["width"],item["height"],item["big_url"],item["mp4_url"],item["has_text"],item["text_guid"])
         self.f.write(content+"\n")
         pic_text = item["text"] if int(item["has_text"])==1 else ""
-        sql = "insert ignore into `weshine_gif`(big_url,gif_id,small_url,width,height,has_text,text,tag,mp4_url) values('%s','%s','%s',%s,%s,%s,'%s','%s','%s');"%(item["big_url"],item["gif_id"],item["small_url"],item["width"],item["height"],item["has_text"],pic_text,item["tag"],item["mp4_url"])
-        sql += "insert ignore into `weshine_keyword`(guid,text) values('%s','%s');"%(item["text_guid"],item["text"])
-        sql += "insert ignore into `weshine_keyword_gif`(gif_id,keyword,tag) values('%s','%s','%s');"%(item["gif_id"],item["text"],item["tag"])
+        sql = "insert ignore into `weshine_gif`(big_url,gif_id,small_url,width,height,has_text,text,tag,mp4_url) values(%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+        sql += "insert ignore into `weshine_keyword`(guid,text) values(%s,%s);"
+        sql += "insert ignore into `weshine_keyword_gif`(gif_id,keyword,tag) values(%s,%s,%s);"
         cursor = self.mysql_con.get_cursor()
-        cursor.execute(sql)
+        cursor.execute(sql,(item["big_url"],item["gif_id"],item["small_url"],item["width"],item["height"],item["has_text"],pic_text,item["tag"],item["mp4_url"],item["text_guid"],item["text"],item["gif_id"],item["text"],item["tag"]))
         self.mysql_con.commit()
 
         return item

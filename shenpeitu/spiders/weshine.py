@@ -50,7 +50,7 @@ class WeshineSpider(scrapy.Spider):
                 content = f.readline().strip()
                 if len(content)==0:
                     break
-                if count>120000:
+                if count<300000:
                     content_list = content.split(" || ")
                     if len(content_list)>=2:
                         text = content_list[1].strip()
@@ -58,7 +58,7 @@ class WeshineSpider(scrapy.Spider):
                         # text = "".join(text.split("\'"))
                         # text = "".join(text.split("""\""""))
 
-                        meta = {"text":text,"text_guid":text_guid}
+                        meta = {"text":text,"text_guid":text_guid,"count":count}
                         print(text)
                         # print(self.get_tag_url())
                         # print(meta)
@@ -99,7 +99,9 @@ class WeshineSpider(scrapy.Spider):
 
     def parse_big_img(self,response):
         print("big_img_parse执行了")
+
         meta = response.meta
+        print(meta["count"])
         ret = json.loads(response.text)
         ret_dict = ret.get("data")
         big_url=ret_dict.get("image").get("ori")
@@ -120,5 +122,6 @@ class WeshineSpider(scrapy.Spider):
         item["big_url"] = big_url
         item["mp4_url"] = mp4_url
         item["text_guid"] = meta["text_guid"]
+        item["count"] = meta["count"]
         yield item
 

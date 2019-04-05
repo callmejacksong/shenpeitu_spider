@@ -20,6 +20,7 @@ class ShenpeituItem(scrapy.Item):
     text = scrapy.Field()
     tag = scrapy.Field()
     text_guid=scrapy.Field()
+    count=scrapy.Field()
 
 
 class ShenpeituDownloadImgItem(scrapy.Item):

@@ -37,44 +37,46 @@ def task(sql):
 def daodata():
     p = pool.Pool(10)
     # 读取文本文件  all_user_text
-    with open("./result_keyword_net_spider_1.txt","r",encoding="utf-8",errors="ignore") as f:
-        count = 0
-        sql = ""
-        while True:
-            item = f.readline()
-            if len(item)==0:
-                break
-            word_list = item.split("-song-")
-            text = word_list[0].strip()
-            tag = word_list[1].strip()
-            gif_id = word_list[2].strip()
-            big_url = word_list[3].strip()
-            width = word_list[4]
-            height = word_list[5]
-            small_url = word_list[6].strip()
-            mp4_url = word_list[7].strip()
-            has_text = word_list[8]
-            text_guid = word_list[9].strip()
-            text = "".join(text.split("\'"))
-            text = "".join(text.split("\""))
+    for i in range(5,8):
+        print("执行到result_keyword_net_spider_%s.txt"%i)
+        with open("./result_keyword_net_spider_%s.txt"%i,"r",encoding="utf-8",errors="ignore") as f:
+            count = 0
+            sql = ""
+            while True:
+                item = f.readline()
+                if len(item)==0:
+                    break
+                word_list = item.split("-song-")
+                text = word_list[0].strip()
+                tag = word_list[1].strip()
+                gif_id = word_list[2].strip()
+                big_url = word_list[3].strip()
+                width = word_list[4]
+                height = word_list[5]
+                small_url = word_list[6].strip()
+                mp4_url = word_list[7].strip()
+                has_text = word_list[8]
+                text_guid = word_list[9].strip()
+                text = "".join(text.split("\'"))
+                text = "".join(text.split("\""))
 
-            pic_text = text if int(has_text)==1 else ""
+                pic_text = text if int(has_text)==1 else ""
 
-            count += 1
-            # cursor.execute(sql,(item["big_url"],item["gif_id"],item["small_url"],item["width"],item["height"],item["has_text"],pic_text,item["tag"],item["mp4_url"],item["text_guid"],item["text"],item["gif_id"],item["text"],item["tag"]))
+                count += 1
+                # cursor.execute(sql,(item["big_url"],item["gif_id"],item["small_url"],item["width"],item["height"],item["has_text"],pic_text,item["tag"],item["mp4_url"],item["text_guid"],item["text"],item["gif_id"],item["text"],item["tag"]))
 
-            sql += "insert ignore into `weshine_gif`(big_url,gif_id,small_url,width,height,has_text,text,tag,mp4_url) values('%s','%s','%s',%s,%s,%s,'%s','%s','%s');"%(big_url,gif_id,small_url,width,height,has_text,pic_text,tag,mp4_url)
-            sql += "insert ignore into `weshine_keyword`(guid,text) values('%s','%s');"%(text_guid,text)
-            sql += "insert ignore into `weshine_keyword_gif`(gif_id,keyword,tag) values('%s','%s','%s');"%(gif_id,text,tag)
+                sql += "insert ignore into `weshine_gif`(big_url,gif_id,small_url,width,height,has_text,text,tag,mp4_url) values('%s','%s','%s',%s,%s,%s,'%s','%s','%s');"%(big_url,gif_id,small_url,width,height,has_text,pic_text,tag,mp4_url)
+                sql += "insert ignore into `weshine_keyword`(guid,text) values('%s','%s');"%(text_guid,text)
+                sql += "insert ignore into `weshine_keyword_gif`(gif_id,keyword,tag) values('%s','%s','%s');"%(gif_id,text,tag)
 
-            if count %100 == 0:
-                # print(sql)
-                p.apply_async(task, args=(sql,))
-                sql = ""
-        print("全部完成")
-        p.close()
-        p.join()
-        print("全部完成.....")
+                if count %500 == 0:
+                    # print(sql)
+                    p.apply_async(task, args=(sql,))
+                    sql = ""
+            print("全部完成")
+            p.close()
+            p.join()
+            print("全部完成.....")
 
 
 

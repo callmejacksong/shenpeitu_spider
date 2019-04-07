@@ -50,7 +50,7 @@ class WeshineSpider(scrapy.Spider):
                 content = f.readline().strip()
                 if len(content)==0:
                     break
-                if count>757000 and count<760000:
+                if count>46379 and count<100000:
                     content_list = content.split(" || ")
                     if len(content_list)>=2:
                         text = content_list[1].strip()

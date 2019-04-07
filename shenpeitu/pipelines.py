@@ -65,7 +65,7 @@ class ShenpeituPipeline(object):
 
     def open_spider(self,spider):
         print("开始蜘蛛执行了")
-        self.f = open("result_keyword_net_spider_1.txt","a",encoding="utf-8",newline="\n")
+        self.f = open("result_keyword_net_spider_5.txt","a",encoding="utf-8",newline="\n")
         # self.mysql_con =DB(host=TestConfig.MYSQL_HOST, port=TestConfig.MYSQL_PORT, user=TestConfig.MYSQL_USER,
         #                  password=TestConfig.MYSQL_PASSWORD, db=TestConfig.MYSQL_DB)
 
